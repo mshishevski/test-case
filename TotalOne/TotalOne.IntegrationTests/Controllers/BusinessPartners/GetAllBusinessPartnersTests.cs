@@ -43,8 +43,6 @@ public class BusinessPartnersTests : IntegrationTestBase
 
         Assert.NotNull(result);
         Assert.Equal(2, result.Entries.Count);
-        Assert.Contains(result.Entries, bp => bp.Name == "Partner A");
-        Assert.Contains(result.Entries, bp => bp.Name == "Partner B");
     }
 
     [Fact]

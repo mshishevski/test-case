@@ -3,24 +3,25 @@
 using Dapper;
 
 using MediatR;
+
 using TotalOne.Domain.Result;
 
 namespace TotalOne.Application.Queries;
 
 public record FilterBusinessPartnersQuery(
-    int? BusinessPartnerId,
+    long? BusinessPartnerId,
     DateTime? LastUpdateStart,
     DateTime? LastUpdateEnd,
     string? Name)
     : IRequest<QueryResult<BaseTableResult<BusinessPartnerQueryResult>>>;
 
-public record FilterBusinessPartnerResult(int BusinessPartnerId, DateTime LastUpdate, string Name);
+public record FilterBusinessPartnersResult(int BusinessPartnerId, DateTime LastUpdate, string Name);
 
-public class FilterBusinessPartnerQueryHandler : IRequestHandler<FilterBusinessPartnersQuery, QueryResult<BaseTableResult<BusinessPartnerQueryResult>>>
+public class FilterBusinessPartnersQueryHandler : IRequestHandler<FilterBusinessPartnersQuery, QueryResult<BaseTableResult<BusinessPartnerQueryResult>>>
 {
     private readonly ITotalOneContext _totalOneContext;
 
-    public FilterBusinessPartnerQueryHandler(ITotalOneContext totalOneContext)
+    public FilterBusinessPartnersQueryHandler(ITotalOneContext totalOneContext)
     {
         _totalOneContext = totalOneContext;
     }
@@ -33,7 +34,7 @@ public class FilterBusinessPartnerQueryHandler : IRequestHandler<FilterBusinessP
 
             var baseQuery = new StringBuilder(@"
                 SELECT BusinessPartnerId, LastUpdate, Name 
-                FROM BusinessPartners
+                FROM BusinessPartner
                 WHERE 1=1");
 
             var parameters = new DynamicParameters();
@@ -49,12 +50,6 @@ public class FilterBusinessPartnerQueryHandler : IRequestHandler<FilterBusinessP
                 baseQuery.Append(" AND LastUpdate BETWEEN @LastUpdateStart AND @LastUpdateEnd");
                 parameters.Add("LastUpdateStart", query.LastUpdateStart.Value);
                 parameters.Add("LastUpdateEnd", query.LastUpdateEnd.Value);
-            }
-
-            if (!string.IsNullOrWhiteSpace(query.Name))
-            {
-                baseQuery.Append(" AND Name LIKE @Name");
-                parameters.Add("Name", $"%{query.Name}%");
             }
 
             var result = await connection.QueryAsync<BusinessPartnerQueryResult>(baseQuery.ToString(), parameters);

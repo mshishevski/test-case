@@ -24,7 +24,7 @@ public class CreateBusinessPartnerCommandHandler : IRequestHandler<CreateBusines
         using var ts = TransactionScopeFactory.CreateReadCommittedTransactionScope();
 
         const string baseQuery = @"
-            INSERT INTO BusinessPartners (Name, LastUpdate)
+            INSERT INTO BusinessPartner (Name, LastUpdate)
             VALUES (@Name, @LastUpdate)
             RETURNING BusinessPartnerId;";
 

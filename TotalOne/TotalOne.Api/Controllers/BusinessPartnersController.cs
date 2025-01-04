@@ -42,6 +42,17 @@ public class BusinessPartnersController : ControllerBase
         return result.GetHttpResult();
     }
 
+    [HttpGet("{businessPartnerId:int}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GetBusinessPartnerWithAttributes([FromRoute] long businessPartnerId, [FromQuery] GetBusinessPartnerWithAttributesRequest request)
+    {
+        var result = await _sender.Send(
+            new GetBusinessPartnerWithAttributesQuery(businessPartnerId));
+
+        return result.GetHttpResult();
+    }
+
     [HttpPost]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -67,7 +78,7 @@ public class BusinessPartnersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> DeleteBusinessPartner([FromRoute] int businessPartnerId)
+    public async Task<IActionResult> DeleteBusinessPartner([FromRoute] long businessPartnerId)
     {
         var result = await _sender.Send(new DeleteBusinessPartnerCommand(businessPartnerId));
 

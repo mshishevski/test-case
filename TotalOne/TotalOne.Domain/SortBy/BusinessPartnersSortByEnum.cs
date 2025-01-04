@@ -3,6 +3,5 @@
 public enum BusinessPartnersSortByEnum
 {
     BusinessPartnerId,
-    LastUpdate,
-    Name
+    LastUpdate
 }

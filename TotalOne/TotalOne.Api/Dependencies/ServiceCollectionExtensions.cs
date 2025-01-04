@@ -30,7 +30,7 @@ public static class ServiceCollectionExtensions
     {
 
         services
-            .AddHttpClient<IArthouseApiHttpService, ArthouseApiHttpService>(client =>
+            .AddHttpClient<IArthausApiHttpService, ArthausApiHttpService>(client =>
             {
                 client.BaseAddress = new Uri(arthouseBaseUri);
                 client.DefaultRequestHeaders.Add("Accept", "application/json");

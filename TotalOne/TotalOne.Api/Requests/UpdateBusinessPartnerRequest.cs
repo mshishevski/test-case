@@ -2,6 +2,6 @@
 
 public class UpdateBusinessPartnerRequest
 {
-    public int BusinessPartnerId { get; set; }
+    public long BusinessPartnerId { get; set; }
     public required string Name { get; set; }
 }

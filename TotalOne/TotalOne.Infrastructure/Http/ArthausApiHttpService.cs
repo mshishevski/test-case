@@ -5,16 +5,16 @@ using TotalOne.Application.Services;
 
 namespace TotalOne.Infrastructure.Http;
 
-public class ArthouseApiHttpService : IArthouseApiHttpService
+public class ArthausApiHttpService : IArthausApiHttpService
 {
     private readonly HttpClient _httpClient;
 
-    public ArthouseApiHttpService(HttpClient httpClient)
+    public ArthausApiHttpService(HttpClient httpClient)
     {
         _httpClient = httpClient;
     }
 
-    public async Task<bool> UpdateBusinessPartner(int businessPartnerId, string Name, CancellationToken cancellationToken)
+    public async Task<bool> UpdateBusinessPartner(long businessPartnerId, string Name, CancellationToken cancellationToken)
     {
         var body = new { businessPartnerId, Name };
         var response = await _httpClient.PatchAsJsonAsync("/business-partners", body, cancellationToken);

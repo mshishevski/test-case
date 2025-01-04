@@ -5,7 +5,7 @@ using TotalOne.Domain.Result;
 
 namespace TotalOne.Application.Commands;
 
-public record DeleteBusinessPartnerCommand(int BusinessPartnerId) : IRequest<CommandResult<DeleteBusinessPartnerCommandResult>>;
+public record DeleteBusinessPartnerCommand(long BusinessPartnerId) : IRequest<CommandResult<DeleteBusinessPartnerCommandResult>>;
 
 public record DeleteBusinessPartnerCommandResult(bool IsDeleted);
 
@@ -20,7 +20,7 @@ public class DeleteBusinessPartnerCommandHandler : IRequestHandler<DeleteBusines
 
     public async Task<CommandResult<DeleteBusinessPartnerCommandResult>> Handle(DeleteBusinessPartnerCommand request, CancellationToken cancellationToken)
     {
-        const string deleteQuery = "DELETE FROM BusinessPartners WHERE BusinessPartnerId = @BusinessPartnerId";
+        const string deleteQuery = "DELETE FROM BusinessPartner WHERE BusinessPartnerId = @BusinessPartnerId";
 
         using var connection = _totalOneContext.CreateConnection();
 

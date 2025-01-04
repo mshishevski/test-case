@@ -14,7 +14,7 @@ public record GetAllBusinessPartnersQuery(int PageIndex, int PageSize, bool Desc
         PagedRequest<BusinessPartnersSortByEnum>(PageIndex, PageSize, DescendingSortDirection, SortBy),
         IRequest<QueryResult<BaseTableResult<BusinessPartnerQueryResult>>>;
 
-public record BusinessPartnerQueryResult(int BusinessPartnerId, DateTime LastUpdate, string Name);
+public record BusinessPartnerQueryResult(int BusinessPartnerId, DateTime LastUpdate);
 
 
 public class GetAllBusinessPartnersQueryHandler : IRequestHandler<GetAllBusinessPartnersQuery, QueryResult<BaseTableResult<BusinessPartnerQueryResult>>>
@@ -28,9 +28,9 @@ public class GetAllBusinessPartnersQueryHandler : IRequestHandler<GetAllBusiness
 
     public async Task<QueryResult<BaseTableResult<BusinessPartnerQueryResult>>> Handle(GetAllBusinessPartnersQuery query, CancellationToken cancellationToken)
     {
-        var baseQuery = "SELECT * FROM BusinessPartners";
+        var baseQuery = "SELECT * FROM BusinessPartner";
 
-        var orderByClause = DapperExtensions.BuildOrderByClause<BusinessPartner>(GetSortBy(query.SortBy), query.DescendingSortDirection);
+        var orderByClause = DapperExtensions.BuildOrderByClause<BusinessPartner>(GetSortByLastUpdate(), query.DescendingSortDirection);
 
         using var connection = _totalOneContext.CreateConnection();
 
@@ -39,14 +39,14 @@ public class GetAllBusinessPartnersQueryHandler : IRequestHandler<GetAllBusiness
             orderByClause,
             query.PageIndex,
             query.PageSize,
-            mapper: x => new BusinessPartnerQueryResult(x.BusinessPartnerId, x.LastUpdate, x.Name)
+            mapper: x => new BusinessPartnerQueryResult(x.BusinessPartnerId, x.LastUpdate)
         );
 
         return QueryResult.Success(result);
     }
 
-    private static Expression<Func<BusinessPartner, object>> GetSortBy(BusinessPartnersSortByEnum sortBy)
+    private static Expression<Func<BusinessPartner, object>> GetSortByLastUpdate()
     {
-        return bp => bp.Name;
+        return bp => bp.LastUpdate;
     }
 }

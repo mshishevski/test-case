@@ -7,18 +7,18 @@ using TotalOne.Domain.Result;
 
 namespace TotalOne.Application.Commands;
 
-public record UpdateBusinessPartnerCommand(int BusinessPartnerId, string Name) : IRequest<CommandResult<UpdateBusinessPartnerCommandResult>>;
+public record UpdateBusinessPartnerCommand(long BusinessPartnerId, string Name) : IRequest<CommandResult<UpdateBusinessPartnerCommandResult>>;
 
 public record UpdateBusinessPartnerCommandResult(bool IsUpdated);
 
 public class UpdateBusinessPartnerCommandHandler : IRequestHandler<UpdateBusinessPartnerCommand, CommandResult<UpdateBusinessPartnerCommandResult>>
 {
     private readonly ITotalOneContext _totalOneContext;
-    private readonly IArthouseApiHttpService _arthouseApi;
+    private readonly IArthausApiHttpService _arthouseApi;
 
     public UpdateBusinessPartnerCommandHandler(
         ITotalOneContext totalOneContext, 
-        IArthouseApiHttpService arthouseApi)
+        IArthausApiHttpService arthouseApi)
     {
         _totalOneContext = totalOneContext;
         _arthouseApi = arthouseApi;
@@ -26,7 +26,7 @@ public class UpdateBusinessPartnerCommandHandler : IRequestHandler<UpdateBusines
 
     public async Task<CommandResult<UpdateBusinessPartnerCommandResult>> Handle(UpdateBusinessPartnerCommand request, CancellationToken cancellationToken)
     {
-        const string updateQuery = "UPDATE BusinessPartners SET Name = @Name WHERE BusinessPartnerId = @BusinessPartnerId";
+        const string updateQuery = "UPDATE BusinessPartner SET Name = @Name WHERE BusinessPartnerId = @BusinessPartnerId";
 
         using var connection = _totalOneContext.CreateConnection();
 

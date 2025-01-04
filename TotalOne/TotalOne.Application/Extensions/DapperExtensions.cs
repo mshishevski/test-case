@@ -50,14 +50,16 @@ public static class DapperExtensions
 
 
     public static string BuildOrderByClause<T>(
-        Expression<Func<T, object>> propertySelector,
-        bool descendingSortDirection)
+    Expression<Func<T, object>> propertySelector,
+    bool descendingSortDirection)
     {
-        // Extract property name from the expression
-        if (propertySelector.Body is not MemberExpression memberExpression)
+
+        MemberExpression memberExpression = propertySelector.Body switch
         {
-            throw new ArgumentException("The property selector must be a member expression.");
-        }
+            MemberExpression member => member,
+            UnaryExpression unary when unary.Operand is MemberExpression member => member,
+            _ => throw new ArgumentException("The property selector must be a member expression.")
+        };
 
         var propertyName = memberExpression.Member.Name;
         return descendingSortDirection ? $"{propertyName} DESC" : $"{propertyName} ASC";
